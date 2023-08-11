@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.Elevator;
 
-public class ElevatorConstans {
+public enum ElevatorState {
+    CLIMB, HOME, TANK
 }
