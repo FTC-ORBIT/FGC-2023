@@ -22,7 +22,7 @@ public class Elevator {
     public static void operate (ElevatorState state, Telemetry telemetry){
         height = elevatorMotor.getCurrentPosition();
         switch (state){
-            case HOME:
+            case CLOSED:
                 wanted = ElevatorConstants.homeHeight;
                 break;
             case TANK:
