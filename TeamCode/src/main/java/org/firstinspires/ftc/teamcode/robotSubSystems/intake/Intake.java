@@ -10,19 +10,21 @@ public class Intake {
 
     public Intake(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     public void operate(IntakeState state) {
+        double power = 0;
         switch (state){
             case INTAKE:
-                intakeMotor.setPower(IntakeConstants.intakePower);
+                power = 1; //Needs to be checked on the robot
                 break;
             case STOP:
-                intakeMotor.setPower(0);
+                power = 0;
                 break;
 
         }
+        intakeMotor.setPower(power);
     }
 
 }
