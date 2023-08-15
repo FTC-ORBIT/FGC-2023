@@ -14,8 +14,10 @@ public class Convertor {
         switch (state){
             case TRANSPORT:
                 power = 1;
+                break;
             case STOP:
                 power = 0;
+                break;
         }
         convertorMotor.setPower(power);
     }
