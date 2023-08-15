@@ -20,15 +20,16 @@ public class Shooter {
     }
 
     public void operate(ShooterState state){
+        double power = 0;
         switch (state){
             case SHOT:
-                shooterMotor1.setPower(ShooterConstants.shooterPower);
-                shooterMotor2.setPower(ShooterConstants.shooterPower);
+                power = 1;
                 break;
             case STOP:
-                shooterMotor1.setPower(0);
-                shooterMotor2.setPower(0);
+                power = 0;
         }
+        shooterMotor1.setPower(power);
+        shooterMotor2.setPower(power);
 
     }
 
