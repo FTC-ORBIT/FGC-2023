@@ -27,6 +27,7 @@ public class Shooter {
                 break;
             case STOP:
                 power = 0;
+                break;
         }
         shooterMotor1.setPower(power);
         shooterMotor2.setPower(power);
