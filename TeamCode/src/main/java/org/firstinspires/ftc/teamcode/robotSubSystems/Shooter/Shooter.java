@@ -22,8 +22,8 @@ public class Shooter {
     public void operate(ShooterState state){
         double power = 0;
         switch (state){
-            case SHOT:
-                power = 1;
+            case SHOOT:
+                power = ShooterConstants.shooterPower;
                 break;
             case STOP:
                 power = 0;
@@ -33,5 +33,6 @@ public class Shooter {
         shooterMotor2.setPower(power);
 
     }
+
 
 }

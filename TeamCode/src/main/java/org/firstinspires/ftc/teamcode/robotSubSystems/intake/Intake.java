@@ -17,12 +17,11 @@ public class Intake {
         double power = 0;
         switch (state){
             case INTAKE:
-                power = 1; //Needs to be checked on the robot
+                power = IntakeConstants.intakePower; //Needs to be checked on the robot
                 break;
             case STOP:
                 power = 0;
                 break;
-
         }
         intakeMotor.setPower(power);
     }
