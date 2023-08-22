@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Conveyor {
     private static DcMotor conveyorMotor;
+    private static float power = 0;
     public Conveyor(HardwareMap hardwareMap){
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
-        conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
     public void operate(ConveyorState state){
-        double power = 0;
         switch (state){
             case TRANSPORT:
                 power = ConveyorConstants.conveyorPower;

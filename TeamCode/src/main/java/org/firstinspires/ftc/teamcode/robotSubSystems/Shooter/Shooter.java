@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,14 +10,14 @@ public class Shooter {
     private static DcMotor shooterMotor2;
     private static VoltageSensor vs;
     private boolean fault = false;
-    private ElapsedTime faultTime = new ElapsedTime();
+    private ElapsedTime lastBallTime = new ElapsedTime();
     private boolean readyToShoot = false;
 
     public Shooter(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterMotor1");
         shooterMotor2 = hardwareMap.get(DcMotor.class, "shooterMotor2");
 
-        shooterMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        // reverse the correct motors if needed
         shooterMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
@@ -39,19 +38,20 @@ public class Shooter {
         shooterMotor2.setPower(power);
 
         update();
+        readyToShoot();
     }
 
     private void update(){
         if(vs.getVoltage() <= ShooterConstants.faultLimit){
             fault = true;
-            faultTime.reset();
+            lastBallTime.reset();
         } else {
             fault = false;
         }
+    }
 
-        if(!getFault() && (float) faultTime.milliseconds() >= ShooterConstants.faultMinTime && AprilTags.inplace || driverButtonPressed) {
-            readyToShoot = true;
-        } else readyToShoot = false;
+    private void readyToShoot (){
+        readyToShoot = !getFault() && (float) lastBallTime.milliseconds() >= ShooterConstants.faultMinTime && AprilTags.inplace || driverButtonPressed;
     }
 
     public boolean getFault() {
