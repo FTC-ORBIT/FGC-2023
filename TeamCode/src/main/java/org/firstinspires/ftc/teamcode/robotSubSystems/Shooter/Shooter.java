@@ -9,9 +9,11 @@ public class Shooter {
     private static DcMotor shooterMotor1;
     private static DcMotor shooterMotor2;
     private static VoltageSensor vs;
-    private boolean fault = false;
-    private ElapsedTime lastBallTime = new ElapsedTime();
-    private boolean readyToShoot = false;
+    private static boolean fault = false;
+    private static ElapsedTime lastBallTime = new ElapsedTime();
+
+    private static double power = 0;
+    private static boolean readyToShoot = false;
 
     public Shooter(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterMotor1");
@@ -21,11 +23,12 @@ public class Shooter {
         shooterMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        vs = hardwareMap.voltageSensor.get("Motor Controller 1");
+        vs = hardwareMap.voltageSensor.get("shooterMotor1"); //I don't think "Motor Controller 1"is the name
     }
 
     public void operate(ShooterState state){
-        double power = 0;
+
+
         switch (state){
             case SHOOT:
                 power = ShooterConstants.shooterPower * (12 / vs.getVoltage());
@@ -34,32 +37,31 @@ public class Shooter {
                 power = 0;
                 break;
         }
-        shooterMotor1.setPower(power);
-        shooterMotor2.setPower(power);
+
+        if (isReadyToShoot()){
+            shooterMotor1.setPower(power);
+            shooterMotor2.setPower(power);
+        }
+
 
         update();
-        readyToShoot();
     }
 
     private void update(){
         if(vs.getVoltage() <= ShooterConstants.faultLimit){
             fault = true;
-            lastBallTime.reset();
         } else {
             fault = false;
         }
     }
 
-    private void readyToShoot (){
-        readyToShoot = !getFault() && (float) lastBallTime.milliseconds() >= ShooterConstants.faultMinTime && AprilTags.inplace || driverButtonPressed;
+    private boolean isReadyToShoot(){
+        return readyToShoot = !getFault() && (float) lastBallTime.milliseconds() >= ShooterConstants.faultMinTime && AprilTags.inplace || driverButtonPressed;
     }
 
     public boolean getFault() {
         return fault;
     }
 
-    public boolean isReadyToShoot(){
-        return readyToShoot;
-    }
 
 }
