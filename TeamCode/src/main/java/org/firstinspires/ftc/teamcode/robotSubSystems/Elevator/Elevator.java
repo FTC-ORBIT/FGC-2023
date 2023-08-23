@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.Elevator;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -13,7 +14,7 @@ public class Elevator {
     private static PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, 0, 0);
     private static float height = 0;
 
-    public Elevator(HardwareMap hardwareMap){
+    public static void init(HardwareMap hardwareMap){
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -38,6 +39,10 @@ public class Elevator {
         elevatorMotor.setPower(elevatorMotorPower + ElevatorConstants.constantPower);
 
         telemetry.addData("height", height);
+    }
+
+    public static void override (Gamepad gamepad){
+        elevatorMotor.setPower(gamepad.left_stick_y);
     }
 
 }

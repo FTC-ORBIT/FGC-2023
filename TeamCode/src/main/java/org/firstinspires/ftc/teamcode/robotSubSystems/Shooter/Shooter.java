@@ -12,10 +12,9 @@ public class Shooter {
     private static DcMotor shooterMotor1;
     private static DcMotor shooterMotor2;
     private static boolean fault = false;
-    private static ElapsedTime lastBallTime = new ElapsedTime();
+    private static final ElapsedTime lastBallTime = new ElapsedTime();
 
     private static double power = 0;
-    private static boolean readyToShoot = false;
 
     public static void init(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterMotor1");

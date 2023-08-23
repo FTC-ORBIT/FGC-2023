@@ -26,7 +26,7 @@ public class Robot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Drivetrain.init(hardwareMap);
         Conveyor.init(hardwareMap);
-//        Elevator elevator = new Elevator(this.hardwareMap);
+        Elevator.init(hardwareMap);
         Intake.init(hardwareMap);
         Shooter.init(hardwareMap);
 
@@ -38,7 +38,11 @@ public class Robot extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()){
-
+            Drivetrain.overide(gamepad1);
+            Conveyor.override(gamepad1);
+            Elevator.override(gamepad1);
+            Intake.override(gamepad1);
+            Shooter.override(gamepad1);
         }
 
     }

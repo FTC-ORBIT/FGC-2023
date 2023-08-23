@@ -11,7 +11,7 @@ public class Conveyor {
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
-    public void operate(ConveyorState state){
+    public static void operate(ConveyorState state){
         switch (state){
             case TRANSPORT:
                 power = ConveyorConstants.conveyorPower;
@@ -23,7 +23,7 @@ public class Conveyor {
         conveyorMotor.setPower(power);
     }
 
-    public void override (Gamepad gamepad){
+    public static void override (Gamepad gamepad){
         conveyorMotor.setPower(gamepad.left_stick_y);
     }
 }
