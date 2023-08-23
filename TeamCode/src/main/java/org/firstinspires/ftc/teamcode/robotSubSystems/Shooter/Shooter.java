@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,7 +17,7 @@ public class Shooter {
     private static double power = 0;
     private static boolean readyToShoot = false;
 
-    public Shooter(HardwareMap hardwareMap){
+    public static void init(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterMotor1");
         shooterMotor2 = hardwareMap.get(DcMotor.class, "shooterMotor2");
 
@@ -67,6 +68,11 @@ public class Shooter {
 
     public boolean isShooting(){
         return GlobalData.voltageSensor.getVoltage() > ShooterConstants.minVoltageRangeWhenShooting && GlobalData.voltageSensor.getVoltage() < ShooterConstants.maxVoltageRangeWhenShooting;
+    }
+
+    public static void override (Gamepad gamepad){
+        shooterMotor1.setPower(gamepad.left_stick_y);
+        shooterMotor2.setPower(gamepad.right_stick_y);
     }
 
 

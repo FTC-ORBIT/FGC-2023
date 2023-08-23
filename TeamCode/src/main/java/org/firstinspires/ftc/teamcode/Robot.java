@@ -24,11 +24,11 @@ public class Robot extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drivetrain drivetrain = new Drivetrain(this.hardwareMap);
-        Conveyor conveyor = new Conveyor(this.hardwareMap);
+        Drivetrain.init(hardwareMap);
+        Conveyor.init(hardwareMap);
 //        Elevator elevator = new Elevator(this.hardwareMap);
-        Intake intake = new Intake(this.hardwareMap);
-        Shooter shooter = new Shooter(this.hardwareMap);
+        Intake.init(hardwareMap);
+        Shooter.init(hardwareMap);
 
         OrbitGyro.init(this.hardwareMap);
 

@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.Conveyor;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Conveyor {
     private static DcMotor conveyorMotor;
     private static float power = 0;
-    public Conveyor(HardwareMap hardwareMap){
+    public static void init(HardwareMap hardwareMap){
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
@@ -20,5 +21,9 @@ public class Conveyor {
                 break;
         }
         conveyorMotor.setPower(power);
+    }
+
+    public void override (Gamepad gamepad){
+        conveyorMotor.setPower(gamepad.left_stick_y);
     }
 }

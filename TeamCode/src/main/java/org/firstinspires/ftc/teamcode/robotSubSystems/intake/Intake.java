@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.intake;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
 
     private static DcMotor intakeMotor;
 
-    public Intake(HardwareMap hardwareMap) {
+    public static void init(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
@@ -24,6 +25,10 @@ public class Intake {
                 break;
         }
         intakeMotor.setPower(power);
+    }
+
+    public static void override (Gamepad gamepad){
+        intakeMotor.setPower(gamepad.left_stick_y);
     }
 
 }
