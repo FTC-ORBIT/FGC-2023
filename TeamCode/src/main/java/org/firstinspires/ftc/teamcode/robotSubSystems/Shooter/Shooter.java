@@ -5,10 +5,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+
 public class Shooter {
     private static DcMotor shooterMotor1;
     private static DcMotor shooterMotor2;
-    private static VoltageSensor vs;
     private static boolean fault = false;
     private static ElapsedTime lastBallTime = new ElapsedTime();
 
@@ -23,7 +24,6 @@ public class Shooter {
         shooterMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        vs = hardwareMap.voltageSensor.get("shooterMotor1"); //I don't think "Motor Controller 1"is the name
     }
 
     public void operate(ShooterState state){
@@ -31,7 +31,7 @@ public class Shooter {
 
         switch (state){
             case SHOOT:
-                power = ShooterConstants.shooterPower * (12 / vs.getVoltage());
+                power = ShooterConstants.shooterPower * (12 / GlobalData.voltageSensor.getVoltage());
                 break;
             case STOP:
                 power = 0;
@@ -43,12 +43,14 @@ public class Shooter {
             shooterMotor2.setPower(power);
         }
 
-
+        if (isShooting()){
+            lastBallTime.reset();
+        }
         update();
     }
 
     private void update(){
-        if(vs.getVoltage() <= ShooterConstants.faultLimit){
+        if(GlobalData.voltageSensor.getVoltage() <= ShooterConstants.faultLimit){
             fault = true;
         } else {
             fault = false;
@@ -61,6 +63,10 @@ public class Shooter {
 
     public boolean getFault() {
         return fault;
+    }
+
+    public boolean isShooting(){
+        return GlobalData.voltageSensor.getVoltage() > ShooterConstants.minVoltageRangeWhenShooting && GlobalData.voltageSensor.getVoltage() < ShooterConstants.maxVoltageRangeWhenShooting;
     }
 
 
