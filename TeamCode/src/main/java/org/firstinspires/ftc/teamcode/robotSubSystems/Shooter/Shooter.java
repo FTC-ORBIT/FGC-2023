@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -10,6 +11,8 @@ import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 public class Shooter {
     private static DcMotor shooterMotor1;
     private static DcMotor shooterMotor2;
+    private static Servo shooterServo;
+    private static double wantedServoPos = ShooterConstants.closedDoorPos;
     private static boolean fault = false;
     private static final ElapsedTime lastBallTime = new ElapsedTime();
 
@@ -27,8 +30,9 @@ public class Shooter {
     public static void init(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterMotor1");
         shooterMotor2 = hardwareMap.get(DcMotor.class, "shooterMotor2");
+        shooterServo = hardwareMap.get(Servo.class, "shooterServo");
 
-        // reverse the correct motors if needed
+        // reverse the correct motors/servo if needed
         shooterMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
@@ -43,6 +47,7 @@ public class Shooter {
                 break;
             case STOP:
                 power = 0;
+                wantedServoPos = ShooterConstants.closedDoorPos;
                 break;
         }
 
@@ -68,6 +73,12 @@ public class Shooter {
         if (isShooting()) {
             lastBallTime.reset();
         }
+
+        if (isReadyToShoot()){
+            wantedServoPos = ShooterConstants.openDoorPos;
+        }
+
+        shooterServo.setPosition(wantedServoPos);
 
         update();
         i++;
