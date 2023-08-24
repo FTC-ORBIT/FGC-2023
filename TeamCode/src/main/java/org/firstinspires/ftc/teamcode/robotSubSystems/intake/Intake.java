@@ -27,7 +27,7 @@ public class Intake {
         intakeMotor.setPower(power);
     }
 
-    public static void override (Gamepad gamepad){
+    public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
         intakeMotor.setPower(gamepad.left_stick_y);
     }
 

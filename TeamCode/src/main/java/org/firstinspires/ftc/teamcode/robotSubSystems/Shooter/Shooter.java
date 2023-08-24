@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -13,6 +12,15 @@ public class Shooter {
     private static DcMotor shooterMotor2;
     private static boolean fault = false;
     private static final ElapsedTime lastBallTime = new ElapsedTime();
+
+    private static final double[] last11VoltageSensor = new double[11];
+    private static double sumOfTheLast10Voltages = 0;
+
+    private static int i = 0;
+
+    private static boolean readyToShoot = false;
+
+    private static boolean isShooting = false;
 
     private static double power = 0;
 
@@ -46,7 +54,23 @@ public class Shooter {
         if (isShooting()){
             lastBallTime.reset();
         }
+
+        last11VoltageSensor[i] = GlobalData.currentVoltage;
+
+        for (int i = 1; i < 11; i++){
+            sumOfTheLast10Voltages += last11VoltageSensor[i];
+        }
+
+        double averageLast10Voltages = sumOfTheLast10Voltages/10;
+
+        isShooting = last11VoltageSensor[0] - ShooterConstants.voltageDownWhenShooting >= averageLast10Voltages;
+
+        if (isShooting()) {
+            lastBallTime.reset();
+        }
+
         update();
+        i++;
     }
 
     private void update(){
@@ -55,10 +79,12 @@ public class Shooter {
         } else {
             fault = false;
         }
+
+        readyToShoot = !getFault() && (float) lastBallTime.milliseconds() >= ShooterConstants.faultMinTime && AprilTags.inplace || driverButtonPressed;
     }
 
     private boolean isReadyToShoot(){
-        return readyToShoot = !getFault() && (float) lastBallTime.milliseconds() >= ShooterConstants.faultMinTime && AprilTags.inplace || driverButtonPressed;
+        return readyToShoot;
     }
 
     public boolean getFault() {
@@ -66,10 +92,10 @@ public class Shooter {
     }
 
     public boolean isShooting(){
-        return GlobalData.voltageSensor.getVoltage() > ShooterConstants.minVoltageRangeWhenShooting && GlobalData.voltageSensor.getVoltage() < ShooterConstants.maxVoltageRangeWhenShooting;
+        return isShooting;
     }
 
-    public static void override (Gamepad gamepad){
+    public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
         shooterMotor1.setPower(gamepad.left_stick_y);
         shooterMotor2.setPower(gamepad.right_stick_y);
     }

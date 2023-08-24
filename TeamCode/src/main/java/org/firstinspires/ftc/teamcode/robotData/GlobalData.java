@@ -9,6 +9,8 @@ public class GlobalData {
 
     public static VoltageSensor voltageSensor;
 
+    public static double currentVoltage = 0;
+
     public static RobotState robotState = RobotState.TRAVEL;
 
 

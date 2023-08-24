@@ -29,7 +29,7 @@ public class Drivetrain {
         motors[1].setPower(rMotorPower);
     }
 
-    public static void overide (Gamepad gamepad){
+    public static void firstTime(Gamepad gamepad){  //only for the first time for the configuration
         motors[0].setPower(gamepad.left_stick_y); //leftMotor
         motors[1].setPower(gamepad.right_stick_y); //rightMotor
     }

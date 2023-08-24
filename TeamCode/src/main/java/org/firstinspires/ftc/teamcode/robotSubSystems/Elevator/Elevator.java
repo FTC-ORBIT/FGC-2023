@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 public class Elevator {
 
     private static DcMotor elevatorMotor;
-    private static float wanted = 0;
-    private static PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, 0, 0);
+    private static double wanted = 0;
+    private static final PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, 0, 0);
     private static float height = 0;
 
     public static void init(HardwareMap hardwareMap){
@@ -41,7 +41,11 @@ public class Elevator {
         telemetry.addData("height", height);
     }
 
-    public static void override (Gamepad gamepad){
+    public static void setPower (float power){
+        elevatorMotor.setPower(power);            //for the override. this will be implemented in the subSystemManager
+    }
+
+    public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
         elevatorMotor.setPower(gamepad.left_stick_y);
     }
 

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Conveyor {
     private static DcMotor conveyorMotor;
-    private static float power = 0;
+    private static double power = 0;
     public static void init(HardwareMap hardwareMap){
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -23,7 +23,7 @@ public class Conveyor {
         conveyorMotor.setPower(power);
     }
 
-    public static void override (Gamepad gamepad){
+    public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
         conveyorMotor.setPower(gamepad.left_stick_y);
     }
 }
