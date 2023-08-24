@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.Elevator;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,11 +10,11 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 public class Elevator {
 
     private static DcMotor elevatorMotor;
-    private static float wanted = 0;
-    private static PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, 0, 0);
+    private static double wanted = 0;
+    private static final PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, 0, 0);
     private static float height = 0;
 
-    public Elevator(HardwareMap hardwareMap){
+    public static void init(HardwareMap hardwareMap){
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -38,6 +39,14 @@ public class Elevator {
         elevatorMotor.setPower(elevatorMotorPower + ElevatorConstants.constantPower);
 
         telemetry.addData("height", height);
+    }
+
+    public static void setPower (float power){
+        elevatorMotor.setPower(power);            //for the override. this will be implemented in the subSystemManager
+    }
+
+    public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
+        elevatorMotor.setPower(gamepad.left_stick_y);
     }
 
 }

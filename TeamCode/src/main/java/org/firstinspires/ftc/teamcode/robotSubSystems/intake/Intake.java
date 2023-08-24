@@ -2,27 +2,34 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.intake;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
 
     private static DcMotor intakeMotor;
 
-    public Intake(HardwareMap hardwareMap) {
+    public static void init(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);  //I never actually saw how to the robot reacts to this specific line
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    public void operate (IntakeState state) {
-        switch (state) {
+    public void operate(IntakeState state) {
+        double power = 0;
+        switch (state){
             case INTAKE:
-                intakeMotor.setPower(IntakeConstants.intakePower);
+                power = IntakeConstants.intakePower; //Needs to be checked on the robot
                 break;
             case STOP:
-                intakeMotor.setPower(0);
+                power = 0;
                 break;
         }
-
+        intakeMotor.setPower(power);
     }
+
+    public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
+        intakeMotor.setPower(gamepad.left_stick_y);
+    }
+
 }
 
