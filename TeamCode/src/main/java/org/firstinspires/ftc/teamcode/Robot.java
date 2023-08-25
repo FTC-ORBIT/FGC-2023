@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Conveyor.Conveyor;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Elevator.Elevator;
-import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.robotSubSystems.ShooterBlueBalls.ShooterBlueBalls;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 
@@ -24,7 +24,7 @@ public class Robot extends LinearOpMode {
         Conveyor.init(hardwareMap);
         Elevator.init(hardwareMap);
         Intake.init(hardwareMap);
-        Shooter.init(hardwareMap);
+        ShooterBlueBalls.init(hardwareMap);
 
         OrbitGyro.init(this.hardwareMap);
 
@@ -42,7 +42,7 @@ public class Robot extends LinearOpMode {
             Conveyor.firstTime(gamepad1);
             Elevator.firstTime(gamepad1);
             Intake.firstTime(gamepad1);
-            Shooter.firstTime(gamepad1);
+            ShooterBlueBalls.firstTime(gamepad1);
         }
 
     }

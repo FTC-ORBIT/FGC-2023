@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter;
+package org.firstinspires.ftc.teamcode.robotSubSystems.ShooterBlueBalls;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -8,11 +8,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
-public class Shooter {
+public class ShooterBlueBalls {
     private static DcMotor shooterMotor1;
     private static DcMotor shooterMotor2;
     private static Servo shooterServo;
-    private static double wantedServoPos = ShooterConstants.closedDoorPos;
+    private static double wantedServoPos = ShooterBlueBallsConstants.closedDoorPos;
     private static boolean fault = false;
     private static final ElapsedTime lastBallTime = new ElapsedTime();
 
@@ -28,9 +28,9 @@ public class Shooter {
     private static double power = 0;
 
     public static void init(HardwareMap hardwareMap){
-        shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterMotor1");
-        shooterMotor2 = hardwareMap.get(DcMotor.class, "shooterMotor2");
-        shooterServo = hardwareMap.get(Servo.class, "shooterServo");
+        shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterBlueBallsMotor1");
+        shooterMotor2 = hardwareMap.get(DcMotor.class, "shooterBlueBallsMotor2");
+        shooterServo = hardwareMap.get(Servo.class, "shooterBlueBallsServo");
 
         // reverse the correct motors/servo if needed
         shooterMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -38,16 +38,16 @@ public class Shooter {
 
     }
 
-    public void operate(ShooterState state){
+    public void operate(ShooterBlueBallsState state){
 
 
         switch (state){
             case SHOOT:
-                power = ShooterConstants.shooterPower * (12 / GlobalData.voltageSensor.getVoltage());
+                power = ShooterBlueBallsConstants.shooterPower * (12 / GlobalData.voltageSensor.getVoltage());
                 break;
             case STOP:
                 power = 0;
-                wantedServoPos = ShooterConstants.closedDoorPos;
+                wantedServoPos = ShooterBlueBallsConstants.closedDoorPos;
                 break;
         }
 
@@ -68,14 +68,14 @@ public class Shooter {
 
         double averageLast10Voltages = sumOfTheLast10Voltages/10;
 
-        isShooting = last11VoltageSensor[0] - ShooterConstants.voltageDownWhenShooting >= averageLast10Voltages;
+        isShooting = last11VoltageSensor[0] - ShooterBlueBallsConstants.voltageDownWhenShooting >= averageLast10Voltages;
 
         if (isShooting()) {
             lastBallTime.reset();
         }
 
         if (isReadyToShoot()){
-            wantedServoPos = ShooterConstants.openDoorPos;
+            wantedServoPos = ShooterBlueBallsConstants.openDoorPos;
         }
 
         shooterServo.setPosition(wantedServoPos);
@@ -85,13 +85,13 @@ public class Shooter {
     }
 
     private void update(){
-        if(GlobalData.voltageSensor.getVoltage() <= ShooterConstants.faultLimit){
+        if(GlobalData.voltageSensor.getVoltage() <= ShooterBlueBallsConstants.faultLimit){
             fault = true;
         } else {
             fault = false;
         }
 
-        readyToShoot = !getFault() && (float) lastBallTime.milliseconds() >= ShooterConstants.faultMinTime && AprilTags.inplace || driverButtonPressed;
+        readyToShoot = !getFault() && (float) lastBallTime.milliseconds() >= ShooterBlueBallsConstants.faultMinTime && AprilTags.inplace || driverButtonPressed;
     }
 
     private boolean isReadyToShoot(){

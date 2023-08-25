@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter;
+package org.firstinspires.ftc.teamcode.robotSubSystems.ShooterBlueBalls;
 
 import com.acmerobotics.dashboard.config.Config;
 
 @Config
-public class ShooterConstants {
+public class ShooterBlueBallsConstants {
     public static double shooterPower = 0.7f;
     public static double faultLimit = 7f;  //this is the min voltage for shooting
     public static double voltageDownWhenShooting = 0.2; //this is how much the voltage goes down when there is a ball
