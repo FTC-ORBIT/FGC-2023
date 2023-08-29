@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 public class Robot extends LinearOpMode {
     // * set new robot pose to 0,0 and heading to 0
 
+    ElapsedTime currentTime = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -33,9 +35,12 @@ public class Robot extends LinearOpMode {
 
         GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
 
+        currentTime.reset();
+
         waitForStart();
 
         while (!isStopRequested()){
+            GlobalData.currentTime = (float) currentTime.milliseconds();
             GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
 
             Drivetrain.firstTime(gamepad1); //only for the first time for the configuration
