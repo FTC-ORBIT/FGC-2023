@@ -1,15 +1,16 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.ShooterBlueBalls;
+package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Sensors.OrbitColorSensor;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterState;
 
-public class ShooterBlueBalls {
+public class ShooterBlueBalls extends Shooter {
     private static DcMotor shooterMotor1;
     private static DcMotor shooterMotor2;
     private static Servo shooterServo;
@@ -31,7 +32,7 @@ public class ShooterBlueBalls {
     private static float firstBlueBallTime = 0; //we don't want to shoot more than 3 balls one after another, this variable represents the time the first blue ball (from the 3) was shot.
     private static int blueBallsCounter = 0;
 
-    public static void init(HardwareMap hardwareMap){
+    public void init(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterBlueBallsMotor1");
         shooterMotor2 = hardwareMap.get(DcMotor.class, "shooterBlueBallsMotor2");
         shooterServo = hardwareMap.get(Servo.class, "shooterBlueBallsServo");
@@ -43,7 +44,7 @@ public class ShooterBlueBalls {
 
     }
 
-    public void operate(ShooterBlueBallsState state){
+    public void operate(ShooterState state){
 
 
         switch (state){
@@ -97,7 +98,7 @@ public class ShooterBlueBalls {
 //  i++;
     }
 
-    private void update(){
+    public void update(){
         if (colorSensor.isShootingBlueBall() && !lastColorSensorState){
             blueBallsCounter++;
             if (blueBallsCounter == 1){
@@ -128,7 +129,7 @@ public class ShooterBlueBalls {
         return isShooting;
     }
 
-    public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
+    public void firstTime(Gamepad gamepad){ //only for the first time for the configuration
         shooterMotor1.setPower(gamepad.left_stick_y);
         shooterMotor2.setPower(gamepad.right_stick_y);
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.ShooterGreenBalls;
+package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterGreenBalls;
 
 public class ShooterGreenBallsConstants {
     public static double shooterPower = 0.7f;

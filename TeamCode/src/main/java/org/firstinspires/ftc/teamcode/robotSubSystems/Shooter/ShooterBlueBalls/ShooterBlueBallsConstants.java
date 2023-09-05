@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.ShooterBlueBalls;
+package org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls;
 
 import com.acmerobotics.dashboard.config.Config;
 
