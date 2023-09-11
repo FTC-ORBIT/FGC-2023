@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Conveyor.Conveyor;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Elevator.Elevator;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls.ShooterBlueBalls;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterGreenBalls.ShooterGreenBalls;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
@@ -20,8 +21,8 @@ public class Robot extends LinearOpMode {
     // * set new robot pose to 0,0 and heading to 0
 
     ElapsedTime currentTime = new ElapsedTime();
-    ShooterBlueBalls shooterBlueBalls = new ShooterBlueBalls();
-    ShooterGreenBalls shooterGreenBalls = new ShooterGreenBalls();
+    Shooter shooterBlueBalls = new ShooterBlueBalls();
+    Shooter shooterGreenBalls = new ShooterGreenBalls();
 
     @Override
     public void runOpMode() throws InterruptedException {
