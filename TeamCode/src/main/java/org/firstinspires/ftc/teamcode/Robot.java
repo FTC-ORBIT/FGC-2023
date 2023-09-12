@@ -4,12 +4,15 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Conveyor.Conveyor;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls.ShooterBlueBalls;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterGreenBalls.ShooterGreenBalls;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 
@@ -17,6 +20,9 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 public class Robot extends LinearOpMode {
     // * set new robot pose to 0,0 and heading to 0
 
+    ElapsedTime currentTime = new ElapsedTime();
+    Shooter shooterBlueBalls = new ShooterBlueBalls();
+    Shooter shooterGreenBalls = new ShooterGreenBalls();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -24,7 +30,8 @@ public class Robot extends LinearOpMode {
         Conveyor.init(hardwareMap);
         Elevator.init(hardwareMap);
         Intake.init(hardwareMap);
-        Shooter.init(hardwareMap);
+        shooterBlueBalls.init(hardwareMap);
+        shooterGreenBalls.init(hardwareMap);
 
         OrbitGyro.init(this.hardwareMap);
 
@@ -33,16 +40,20 @@ public class Robot extends LinearOpMode {
 
         GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
 
+        currentTime.reset();
+
         waitForStart();
 
         while (!isStopRequested()){
+            GlobalData.currentTime = (float) currentTime.milliseconds();
             GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
 
             Drivetrain.firstTime(gamepad1); //only for the first time for the configuration
             Conveyor.firstTime(gamepad1);
             Elevator.firstTime(gamepad1);
             Intake.firstTime(gamepad1);
-            Shooter.firstTime(gamepad1);
+            shooterBlueBalls.firstTime(gamepad1);
+            shooterGreenBalls.firstTime(gamepad1);
         }
 
     }

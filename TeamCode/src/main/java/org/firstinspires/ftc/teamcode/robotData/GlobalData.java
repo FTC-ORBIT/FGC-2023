@@ -13,5 +13,7 @@ public class GlobalData {
 
     public static RobotState robotState = RobotState.TRAVEL;
 
+    public static float currentTime = 0;
+
 
 }

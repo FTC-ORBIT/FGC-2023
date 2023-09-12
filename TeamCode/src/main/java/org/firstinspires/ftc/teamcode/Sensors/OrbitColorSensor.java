@@ -15,6 +15,23 @@ public class OrbitColorSensor {
     }
 
 
+    public boolean isShootingBlueBall() {
+            float[] currentColors = {colorSensor.red(), colorSensor.green(), colorSensor.blue()};
+            int check = 0;
+            for (int i = 0; i < 3; i++){
+                if ((currentColors[i] < Constants.blueBalls[i] + Constants.colorRange) && (currentColors[i] > Constants.blueBalls[i] - Constants.colorRange)){
+                    check ++;
+                }
+            }
+            if (check == 3) {
+                check = 0;
+                return true;
+            } else {
+                check = 0;
+                return false;
+            }
+
+    }
 
     public void printRGB (Telemetry telemetry){
         telemetry.addData("red", colorSensor.red());

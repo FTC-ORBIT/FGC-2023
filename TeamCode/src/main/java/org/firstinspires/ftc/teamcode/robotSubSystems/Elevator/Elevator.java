@@ -27,7 +27,7 @@ public class Elevator {
                 wanted = ElevatorConstants.homeHeight;
                 break;
             case TANK:
-                wanted = ElevatorConstants.tankHeight;
+                wanted = ElevatorConstants.tankHeight;  // may be useless
                 break;
             case CLIMB:
                 wanted = ElevatorConstants.climbHeight;
