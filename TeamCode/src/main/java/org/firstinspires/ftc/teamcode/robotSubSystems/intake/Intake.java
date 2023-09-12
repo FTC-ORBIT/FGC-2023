@@ -14,7 +14,7 @@ public class Intake {
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    public void operate(IntakeState state) {
+    public static void operate(IntakeState state) {
         double power = 0;
         switch (state){
             case INTAKE:
