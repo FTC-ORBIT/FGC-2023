@@ -14,7 +14,10 @@ public class Conveyor {
     public static void operate(ConveyorState state){
         switch (state){
             case TRANSPORT:
-                power = ConveyorConstants.conveyorPower;
+                power = ConveyorConstants.conveyorTransportPower;
+                break;
+            case BACKWARDS:
+                power = ConveyorConstants.conveyorBackwardsPower;
                 break;
             case STOP:
                 power = 0;
