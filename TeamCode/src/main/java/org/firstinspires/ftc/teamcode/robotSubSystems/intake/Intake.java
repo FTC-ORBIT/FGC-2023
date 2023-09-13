@@ -14,7 +14,7 @@ public class Intake {
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    public static void operate(IntakeState state) {
+    public static void operate(IntakeState state, Gamepad gamepad) {
         double power = 0;
         switch (state){
             case INTAKE:
@@ -22,6 +22,9 @@ public class Intake {
                 break;
             case STOP:
                 power = 0;
+                break;
+            case OVERRIDE:
+                power = -gamepad.right_stick_y;
                 break;
         }
         intakeMotor.setPower(power);

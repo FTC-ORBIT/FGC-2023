@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls.ShooterBlueBallsConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterState;
 
 public class ShooterGreenBalls extends Shooter {
@@ -16,6 +18,8 @@ public class ShooterGreenBalls extends Shooter {
     private static double wantedServoPos = 0;
     private static boolean lastRightBumper;
     private static boolean lastLeftBumper;
+    private static ShooterState lastState = ShooterState.STOP;
+    private static double startedShootingTime = 0;
 
     @Override
     public void init(HardwareMap hardwareMap) {
@@ -30,10 +34,18 @@ public class ShooterGreenBalls extends Shooter {
     public void operate(ShooterState state) {
         switch (state){
             case SHOOT:
-                wantedPower = ShooterGreenBallsConstants.shooterPower;
-                wantedServoPos = ShooterGreenBallsConstants.openServoPos;
+                if (!state.equals(lastState)){
+                    startedShootingTime = GlobalData.currentTime;
+                }
+                wantedPower = ShooterBlueBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
+                if (GlobalData.currentTime - ShooterBlueBallsConstants.shooterDelaySec >= startedShootingTime) {
+                    wantedServoPos = ShooterGreenBallsConstants.openServoPos;
+                } else {
+                    wantedServoPos = ShooterGreenBallsConstants.closedServoPos;
+                }
                 break;
             case STOP:
+                wantedPower = 0;
                 wantedServoPos = ShooterGreenBallsConstants.closedServoPos;
                 break;
         }
@@ -41,12 +53,9 @@ public class ShooterGreenBalls extends Shooter {
         greenBallsMotor.setPower(wantedPower);
         greenBallsServo.setPosition(wantedServoPos);
 
+        lastState = state;
     }
 
-    @Override
-    public void update() {
-
-    }
 
     @Override
     public void firstTime(Gamepad gamepad) {

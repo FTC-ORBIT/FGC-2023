@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.Elevator.Elevator;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls.ShooterBlueBalls;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterGreenBalls.ShooterGreenBalls;
+import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 
@@ -33,10 +35,10 @@ public class Robot extends LinearOpMode {
         shooterBlueBalls.init(hardwareMap);
         shooterGreenBalls.init(hardwareMap);
 
-        OrbitGyro.init(this.hardwareMap);
+//        OrbitGyro.init(this.hardwareMap);
 
-        GlobalData.voltageSensor = hardwareMap.voltageSensor.get("Motor Controller 1");
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        GlobalData.voltageSensor = hardwareMap.voltageSensor.iterator().next();
+//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
 
@@ -47,13 +49,12 @@ public class Robot extends LinearOpMode {
         while (!isStopRequested()){
             GlobalData.currentTime = (float) currentTime.milliseconds();
             GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
+            telemetry.addData("voltage", GlobalData.currentVoltage);
 
-            Drivetrain.firstTime(gamepad1); //only for the first time for the configuration
-            Conveyor.firstTime(gamepad1);
+            Drivetrain.operate(-gamepad1.left_stick_y, gamepad1.right_trigger, gamepad1.left_trigger);
             Elevator.firstTime(gamepad1);
-            Intake.firstTime(gamepad1);
-            shooterBlueBalls.firstTime(gamepad1);
-            shooterGreenBalls.firstTime(gamepad1);
+//            SubSystemManager.setSubsystemToState(SubSystemManager.getStateFromJoystick(gamepad1), gamepad1, telemetry);
+            telemetry.update();
         }
 
     }

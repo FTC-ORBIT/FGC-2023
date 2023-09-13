@@ -37,7 +37,7 @@ public class SubSystemManager {
                 : gamepad.a ? RobotState.INTAKE
                 : gamepad.x ? RobotState.SHOOT_BLUE
                 : gamepad.y ? RobotState.SHOOT_GREEN
-                : gamepad.dpad_up || gamepad.dpad_down ? RobotState.CLIMB : null;
+                : gamepad.dpad_up || gamepad.dpad_down ? RobotState.CLIMB : prevRobotState;
     }
 
     private static RobotState getStateFromWantedAndCurrent(final boolean[] buttons,
@@ -60,21 +60,23 @@ public class SubSystemManager {
         switch (robotState) {
             case TRAVEL:
             default:
-                conveyorState = ConveyorState.TRANSPORT;
+                conveyorState = ConveyorState.STOP;
                 intakeState = IntakeState.STOP;
+                shooterBlueBallsState = ShooterState.STOP;
+                shooterGreenBallsState = ShooterState.STOP;
                 break;
             case INTAKE:
-                conveyorState = ConveyorState.TRANSPORT;
+                conveyorState = ConveyorState.STOP;
                 intakeState = IntakeState.INTAKE;
                 break;
             case SHOOT_BLUE:
                 conveyorState = ConveyorState.TRANSPORT;
-                intakeState = IntakeState.STOP;
+                intakeState = IntakeState.INTAKE;
                 shooterBlueBallsState = ShooterState.SHOOT;
                 break;
             case SHOOT_GREEN:
                 conveyorState = ConveyorState.TRANSPORT;
-                intakeState = IntakeState.STOP;
+                intakeState = IntakeState.INTAKE;
                 shooterGreenBallsState = ShooterState.SHOOT;
                 break;
             case CLIMB:
@@ -87,16 +89,22 @@ public class SubSystemManager {
                 } else if (gamepad.dpad_down){
                     elevatorState = ElevatorState.CLOSED;
                 }
+                break;
         }
 
         if (!lastRightBumper && gamepad.right_bumper){
             tankGrabberState = tankGrabberState.equals(TankGrabberStates.OPEN) ? TankGrabberStates.CLOSED : TankGrabberStates.OPEN;
         }
 
-        Conveyor.operate(conveyorState);
+        if (Math.abs(gamepad.right_stick_y) > 0.2) {
+            intakeState = IntakeState.OVERRIDE;
+            conveyorState = ConveyorState.OVERRIDE;
+        }
+
+        Conveyor.operate(conveyorState, gamepad);
         Drivetrain.operate(-gamepad.left_stick_y, gamepad.right_trigger, gamepad.left_trigger);
         Elevator.operate(elevatorState, telemetry);
-        Intake.operate(intakeState);
+        Intake.operate(intakeState, gamepad);
         shooterBlueBalls.operate(shooterBlueBallsState);
         shooterGreenBalls.operate(shooterGreenBallsState);
         TankGrabber.operate(tankGrabberState);

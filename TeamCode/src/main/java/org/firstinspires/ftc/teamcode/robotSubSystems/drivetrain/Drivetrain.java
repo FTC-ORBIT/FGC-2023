@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,6 +16,9 @@ public class Drivetrain {
         motors[0] = hardwareMap.get(DcMotor.class, "leftMotor");
         motors[1] = hardwareMap.get(DcMotor.class, "rightMotor");
         //TODO make sure to reverse the correct motors according to your robot
+
+        motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         for (final DcMotor motor : motors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
@@ -27,6 +31,7 @@ public class Drivetrain {
 
         motors[0].setPower(lMotorPower);
         motors[1].setPower(rMotorPower);
+
     }
 
     public static void firstTime(Gamepad gamepad){  //only for the first time for the configuration

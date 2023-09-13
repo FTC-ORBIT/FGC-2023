@@ -22,6 +22,6 @@ public class TankGrabber {
                 wantedPos = TankGrabberConstants.closedPos;
                 break;
         }
-        tankGrabber.setPosition(wantedPos);
+//        tankGrabber.setPosition(wantedPos);
     }
 }
