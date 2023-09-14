@@ -99,6 +99,7 @@ public class SubSystemManager {
         if (Math.abs(gamepad.right_stick_y) > 0.2) {
             intakeState = IntakeState.OVERRIDE;
             conveyorState = ConveyorState.OVERRIDE;
+            telemetry.addData("over 0.2", null);
         }
 
         Conveyor.operate(conveyorState, gamepad);
@@ -111,7 +112,7 @@ public class SubSystemManager {
 
 
 
-
+        telemetry.update();
         prevRobotState = robotState;
     }
 }

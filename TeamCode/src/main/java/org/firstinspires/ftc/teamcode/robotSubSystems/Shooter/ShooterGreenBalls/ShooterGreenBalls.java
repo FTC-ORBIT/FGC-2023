@@ -45,7 +45,7 @@ public class ShooterGreenBalls extends Shooter {
                 }
                 break;
             case STOP:
-                wantedPower = 0;
+                wantedPower = ShooterGreenBallsConstants.stopPower;
                 wantedServoPos = ShooterGreenBallsConstants.closedServoPos;
                 break;
         }
