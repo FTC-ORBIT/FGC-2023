@@ -31,12 +31,14 @@ public class ShooterBlueBalls extends Shooter {
     private static boolean lastColorSensorState = false;
     private static float firstBlueBallTime = 0; //we don't want to shoot more than 3 balls one after another, this variable represents the time the first blue ball (from the 3) was shot.
     private static int blueBallsCounter = 0;
+    private static ShooterState lastState = ShooterState.STOP;
+    private static double startedShootingTime = 0;
 
     public void init(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterBlueBallsMotor1");
         shooterMotor2 = hardwareMap.get(DcMotor.class, "shooterBlueBallsMotor2");
         shooterServo = hardwareMap.get(Servo.class, "shooterBlueBallsServo");
-        colorSensor = new OrbitColorSensor(hardwareMap, "blueBallsColorSensor");
+//        colorSensor = new OrbitColorSensor(hardwareMap, "blueBallsColorSensor");
 
         // reverse the correct motors/servo if needed
         shooterMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -49,11 +51,20 @@ public class ShooterBlueBalls extends Shooter {
 
         switch (state){
             case SHOOT:
-                power = ShooterBlueBallsConstants.shooterPower * (12 / GlobalData.voltageSensor.getVoltage());
+                if (!state.equals(lastState)){
+                    startedShootingTime = GlobalData.currentTime;
+                }
+                power = ShooterBlueBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
+                if (GlobalData.currentTime - ShooterBlueBallsConstants.shooterDelaySec >= startedShootingTime) {
+                    shooterServo.setPosition(ShooterBlueBallsConstants.openDoorPos);
+                } else {
+                    shooterServo.setPosition(ShooterBlueBallsConstants.closedDoorPos);
+                }
                 break;
             case STOP:
                 power = 0;
                 wantedServoPos = ShooterBlueBallsConstants.closedDoorPos;
+                shooterServo.setPosition(ShooterBlueBallsConstants.closedDoorPos);
                 break;
         }
 
@@ -61,61 +72,9 @@ public class ShooterBlueBalls extends Shooter {
         shooterMotor1.setPower(power);
         shooterMotor2.setPower(power);
 
-        if (isReadyToShoot()){
-            shooterServo.setPosition(ShooterBlueBallsConstants.openDoorPos);
-        } else {
-            shooterServo.setPosition(ShooterBlueBallsConstants.closedDoorPos);
-        }
-
-        //I know most of the functions are now useless now. yet, I chose to leave them alone for now due to the frequent concept change
-
-//        if (isShooting()){
-//            lastBallTime.reset();
-//        }
-//
-//        last11VoltageSensor[i] = GlobalData.currentVoltage;
-//
-//        for (int i = 1; i < 11; i++){
-//            sumOfTheLast10Voltages += last11VoltageSensor[i];
-//        }
-//
-//        double averageLast10Voltages = sumOfTheLast10Voltages/10;
-//
-//        isShooting = last11VoltageSensor[0] - ShooterBlueBallsConstants.voltageDownWhenShooting >= averageLast10Voltages;
-//
-//        if (isShooting()) {
-//            lastBallTime.reset();
-//        }
-//
-//        if (isReadyToShoot()){
-//            wantedServoPos = ShooterBlueBallsConstants.openDoorPos;
-//        }
-//
-//        shooterServo.setPosition(wantedServoPos);
-//
-        update();
-//  \7
-//  i++;
+        lastState = state;
     }
 
-    public void update(){
-        if (colorSensor.isShootingBlueBall() && !lastColorSensorState){
-            blueBallsCounter++;
-            if (blueBallsCounter == 1){
-                firstBlueBallTime = GlobalData.currentTime;
-            }
-        }
-
-        if (firstBlueBallTime + ShooterBlueBallsConstants.minTimeSec <= GlobalData.currentTime){
-            readyToShoot = true;
-        } else {
-            readyToShoot = false;
-        }
-
-
-
-        lastColorSensorState = colorSensor.isShootingBlueBall();
-    }
 
     private boolean isReadyToShoot(){
         return readyToShoot;

@@ -46,7 +46,7 @@ public class Elevator {
     }
 
     public static void firstTime(Gamepad gamepad){ //only for the first time for the configuration
-        elevatorMotor.setPower(gamepad.left_stick_y);
+        elevatorMotor.setPower(gamepad.right_stick_y);
     }
 
 }
