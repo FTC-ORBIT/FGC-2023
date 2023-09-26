@@ -5,6 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public abstract class Shooter {
     public abstract void init(HardwareMap hardwareMap);
-    public abstract void operate(ShooterState state);
+    public abstract void operate(ShooterState state, Gamepad gamepad);
     public abstract void firstTime(Gamepad gamepad);
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.Conveyor;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,6 +11,7 @@ public class Conveyor {
     public static void init(HardwareMap hardwareMap){
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        conveyorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     public static void operate(ConveyorState state, Gamepad gamepad){
         switch (state){
@@ -23,7 +25,7 @@ public class Conveyor {
                 power = 0;
                 break;
             case OVERRIDE:
-                power = -gamepad.right_stick_y;
+                power = -gamepad.right_stick_x;
                 break;
         }
         conveyorMotor.setPower(power);
