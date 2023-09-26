@@ -4,6 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class ConveyorConstants {
-    public static double conveyorTransportPower = 0.5f;
-    public static double conveyorBackwardsPower = -0.5f;
+    public static double conveyorTransportPower = 1f;
+    public static double conveyorBackwardsPower = -1f;
 }

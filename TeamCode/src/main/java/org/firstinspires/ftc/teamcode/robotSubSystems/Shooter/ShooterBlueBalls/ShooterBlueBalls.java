@@ -46,7 +46,7 @@ public class ShooterBlueBalls extends Shooter {
 
     }
 
-    public void operate(ShooterState state){
+    public void operate(ShooterState state, Gamepad gamepad){
 
 
         switch (state){

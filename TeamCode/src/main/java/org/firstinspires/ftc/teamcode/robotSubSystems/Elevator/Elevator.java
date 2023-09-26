@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 
 public class Elevator {
@@ -20,25 +19,29 @@ public class Elevator {
         elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public static void operate (ElevatorState state, Telemetry telemetry){
-        height = elevatorMotor.getCurrentPosition();
-        switch (state){
-            case CLOSED:
-                wanted = ElevatorConstants.homeHeight;
-                break;
-            case TANK:
-                wanted = ElevatorConstants.tankHeight;  // may be useless
-                break;
-            case CLIMB:
-                wanted = ElevatorConstants.climbHeight;
-                break;
+    public static void operate (Gamepad gamepad){
+//        height = elevatorMotor.getCurrentPosition();
+//        switch (state){
+//            case CLOSED:
+//                wanted = ElevatorConstants.homeHeight;
+//                break;
+//            case TANK:
+//                wanted = ElevatorConstants.tankHeight;  // may be useless
+//                break;
+//            case CLIMB:
+//                wanted = ElevatorConstants.climbHeight;
+//                break;
+//        }
+//        elevatorPID.setWanted(wanted);
+//        double elevatorMotorPower = elevatorPID.update(height);
+//
+//        elevatorMotor.setPower(elevatorMotorPower + ElevatorConstants.constantPower);
+
+        if (gamepad.right_bumper){
+            elevatorMotor.setPower(ElevatorConstants.powerUp);
+        } else if (gamepad.left_bumper){
+            elevatorMotor.setPower(ElevatorConstants.powerDown);
         }
-        elevatorPID.setWanted(wanted);
-        double elevatorMotorPower = elevatorPID.update(height);
-
-        elevatorMotor.setPower(elevatorMotorPower + ElevatorConstants.constantPower);
-
-        telemetry.addData("height", height);
     }
 
     public static void setPower (float power){

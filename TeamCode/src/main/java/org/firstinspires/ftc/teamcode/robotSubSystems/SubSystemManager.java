@@ -71,12 +71,12 @@ public class SubSystemManager {
                 break;
             case SHOOT_BLUE:
                 conveyorState = ConveyorState.TRANSPORT;
-                intakeState = IntakeState.INTAKE;
+                intakeState = IntakeState.STOP;
                 shooterBlueBallsState = ShooterState.SHOOT;
                 break;
             case SHOOT_GREEN:
-                conveyorState = ConveyorState.TRANSPORT;
-                intakeState = IntakeState.INTAKE;
+                conveyorState = GlobalData.isReadyToShoot? ConveyorState.TRANSPORT : ConveyorState.STOP;
+                intakeState = IntakeState.STOP;
                 shooterGreenBallsState = ShooterState.SHOOT;
                 break;
             case CLIMB:
@@ -98,16 +98,17 @@ public class SubSystemManager {
 
         if (Math.abs(gamepad.right_stick_y) > 0.2) {
             intakeState = IntakeState.OVERRIDE;
-            conveyorState = ConveyorState.OVERRIDE;
             telemetry.addData("over 0.2", null);
+        } else if (Math.abs(gamepad.right_stick_x) > 0.2){
+            conveyorState = ConveyorState.OVERRIDE;
         }
 
         Conveyor.operate(conveyorState, gamepad);
         Drivetrain.operate(-gamepad.left_stick_y, gamepad.right_trigger, gamepad.left_trigger);
-        Elevator.operate(elevatorState, telemetry);
+        Elevator.operate(gamepad);
         Intake.operate(intakeState, gamepad);
-        shooterBlueBalls.operate(shooterBlueBallsState);
-        shooterGreenBalls.operate(shooterGreenBallsState);
+        shooterBlueBalls.operate(shooterBlueBallsState, gamepad);
+        shooterGreenBalls.operate(shooterGreenBallsState, gamepad);
         TankGrabber.operate(tankGrabberState);
 
 

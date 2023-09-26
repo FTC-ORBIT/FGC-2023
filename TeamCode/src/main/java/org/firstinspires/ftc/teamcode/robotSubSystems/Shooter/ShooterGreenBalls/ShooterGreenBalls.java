@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls.ShooterBlueBallsConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterState;
@@ -13,9 +14,9 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterState;
 public class ShooterGreenBalls extends Shooter {
 
     private static DcMotor greenBallsMotor;
-    private static Servo greenBallsServo;
+    public static Servo greenBallsServo;
     private static double wantedPower = 0;
-    private static double wantedServoPos = 0;
+    public static double wantedServoPos = 0;
     private static boolean lastRightBumper;
     private static boolean lastLeftBumper;
     private static ShooterState lastState = ShooterState.STOP;
@@ -31,28 +32,31 @@ public class ShooterGreenBalls extends Shooter {
     }
 
     @Override
-    public void operate(ShooterState state) {
+    public void operate(ShooterState state, Gamepad gamepad) {
+        if (GlobalData.currentRobotState.equals(RobotState.SHOOT_BLUE)){
+            wantedServoPos = ShooterGreenBallsConstants.closedServoPos;
+        }
         switch (state){
             case SHOOT:
                 if (!state.equals(lastState)){
                     startedShootingTime = GlobalData.currentTime;
                 }
-                wantedPower = ShooterBlueBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
+                wantedPower = ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
                 if (GlobalData.currentTime - ShooterBlueBallsConstants.shooterDelaySec >= startedShootingTime) {
                     wantedServoPos = ShooterGreenBallsConstants.openServoPos;
+                    GlobalData.isReadyToShoot = true;
                 } else {
                     wantedServoPos = ShooterGreenBallsConstants.closedServoPos;
+                    GlobalData.isReadyToShoot = false;
                 }
                 break;
             case STOP:
                 wantedPower = ShooterGreenBallsConstants.stopPower;
-                wantedServoPos = ShooterGreenBallsConstants.closedServoPos;
                 break;
         }
 
         greenBallsMotor.setPower(wantedPower);
         greenBallsServo.setPosition(wantedServoPos);
-
         lastState = state;
     }
 
