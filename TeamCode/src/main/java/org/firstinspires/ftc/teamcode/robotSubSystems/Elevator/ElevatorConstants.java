@@ -11,5 +11,5 @@ public class ElevatorConstants {
     public static double tankHeight = 0;
     public static double climbHeight = 0;
     public static double powerUp = 0.8;
-    public static double powerDown = 0.8;
+    public static double powerDown = -0.8;
 }

@@ -4,5 +4,5 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class IntakeConstants {
-public static double intakePower = 1f;
+public static double intakePower = 0.85f;
 }

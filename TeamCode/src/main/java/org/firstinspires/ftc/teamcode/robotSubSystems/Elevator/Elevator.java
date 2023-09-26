@@ -41,7 +41,7 @@ public class Elevator {
             elevatorMotor.setPower(ElevatorConstants.powerUp);
         } else if (gamepad.left_bumper){
             elevatorMotor.setPower(ElevatorConstants.powerDown);
-        }
+        } else elevatorMotor.setPower(0);
     }
 
     public static void setPower (float power){

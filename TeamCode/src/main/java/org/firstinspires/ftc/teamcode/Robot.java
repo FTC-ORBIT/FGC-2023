@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.sun.tools.javac.comp.Resolve;
 
 import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -49,6 +50,7 @@ public class Robot extends LinearOpMode {
         while (!isStopRequested()){
             GlobalData.currentTime = (float) currentTime.milliseconds();
             GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
+
 
             SubSystemManager.setSubsystemToState(SubSystemManager.getStateFromJoystick(gamepad1), gamepad1, telemetry);
             GlobalData.currentRobotState = SubSystemManager.getStateFromJoystick(gamepad1);

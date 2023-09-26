@@ -66,12 +66,12 @@ public class SubSystemManager {
                 shooterGreenBallsState = ShooterState.STOP;
                 break;
             case INTAKE:
-                conveyorState = ConveyorState.STOP;
+                conveyorState = ConveyorState.TRANSPORT;
                 intakeState = IntakeState.INTAKE;
                 break;
             case SHOOT_BLUE:
-                conveyorState = ConveyorState.TRANSPORT;
-                intakeState = IntakeState.STOP;
+                conveyorState = ConveyorState.STOP;
+                intakeState = IntakeState.INTAKE;
                 shooterBlueBallsState = ShooterState.SHOOT;
                 break;
             case SHOOT_GREEN:
