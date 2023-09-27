@@ -144,7 +144,6 @@ public class Localization extends LinearOpMode {
         motors[1].setPower(rightPower);
 
     }
-
     /**
      * Initialize the AprilTag processor.
      */

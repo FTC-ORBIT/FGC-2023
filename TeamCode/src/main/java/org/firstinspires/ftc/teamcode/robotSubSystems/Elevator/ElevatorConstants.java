@@ -12,4 +12,7 @@ public class ElevatorConstants {
     public static double climbHeight = 0;
     public static double powerUp = 0.8;
     public static double powerDown = -0.8;
+    public static double servoOpen = 0.55;
+    public static double servoClose = 0.17;
+
 }

@@ -52,6 +52,7 @@ public class Robot extends LinearOpMode {
             GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
 
 
+            telemetry.addData("servo", Elevator.elevatorServo.getPosition());
             SubSystemManager.setSubsystemToState(SubSystemManager.getStateFromJoystick(gamepad1), gamepad1, telemetry);
             GlobalData.currentRobotState = SubSystemManager.getStateFromJoystick(gamepad1);
             telemetry.update();
