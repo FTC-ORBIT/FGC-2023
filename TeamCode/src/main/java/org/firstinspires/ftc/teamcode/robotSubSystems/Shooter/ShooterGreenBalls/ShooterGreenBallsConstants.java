@@ -8,5 +8,5 @@ public class ShooterGreenBallsConstants {
     public static double openServoPos = 0.5f;
     public static double closedServoPos = 1;
     public static double stopPower = 0;
-    public static double shooterDelaySec = 3000;
+    public static double shooterDelaySec = 1500;
 }

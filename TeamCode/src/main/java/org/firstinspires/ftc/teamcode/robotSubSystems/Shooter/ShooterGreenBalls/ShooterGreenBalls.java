@@ -44,7 +44,9 @@ public class ShooterGreenBalls extends Shooter {
                 if (!state.equals(lastState)){
                     startedShootingTime = GlobalData.currentTime;
                 }
-                wantedPower = ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
+                if (GlobalData.currentTime - ShooterBlueBallsConstants.preActiveSec >= startedShootingTime) {
+                    wantedPower = ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
+                } else wantedPower = -(ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage));
                 if (GlobalData.currentTime - ShooterBlueBallsConstants.shooterDelaySec >= startedShootingTime) {
                     shooterServo.setPower(1);
                     GlobalData.isReadyToShoot = true;
