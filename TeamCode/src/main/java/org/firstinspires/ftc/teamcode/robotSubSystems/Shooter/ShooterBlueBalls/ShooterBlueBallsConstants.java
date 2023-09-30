@@ -11,7 +11,7 @@ public class ShooterBlueBallsConstants {
     public static double openDoorPos = 0.6;
     public static double minTimeSec = 0.5; //as discussed, the min time between each set of 3 balls is 0.5 seconds for now
     public static double closedDoorPos = 0.15;
-    public static double shooterDelaySec = 1500;
-    public static double preActiveSec = 200;
+    public static double shooterDelaySec = 1000;
+    public static double preActiveSec = 500;
 
 }

@@ -7,16 +7,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
+import org.firstinspires.ftc.teamcode.Sensors.OrbitGyro;
+import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class Elevator {
 
     private static DcMotor elevatorMotor;
+    private static double motorPower = 0;
     public static Servo elevatorServo;
-    private static double wanted = 0;
-    private static final PID elevatorPID = new PID(ElevatorConstants.kp, ElevatorConstants.ki, ElevatorConstants.kd, 0, 0);
-    private static float height = 0;
     private static boolean servoToggle = false;
-    private static boolean lastDpad = false;
+    private static boolean lastDPadRight = true;
 
 
     public static void init(HardwareMap hardwareMap){
@@ -28,44 +28,32 @@ public class Elevator {
         elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public static void operate (Gamepad gamepad){
-//        height = elevatorMotor.getCurrentPosition();
-//        switch (state){
-//            case CLOSED:
-//                wanted = ElevatorConstants.homeHeight;
-//                break;
-//            case TANK:
-//                wanted = ElevatorConstants.tankHeight;  // may be useless
-//                break;
-//            case CLIMB:
-//                wanted = ElevatorConstants.climbHeight;
-//                break;
-//        }
-//        elevatorPID.setWanted(wanted);
-//        double elevatorMotorPower = elevatorPID.update(height);
-//
-//        elevatorMotor.setPower(elevatorMotorPower + ElevatorConstants.constantPower);
+    public static void operate (ElevatorState state, Gamepad gamepad){
 
-        if (gamepad.right_bumper){
-            elevatorMotor.setPower(ElevatorConstants.powerUp);
-        } else if (gamepad.left_bumper){
-            elevatorMotor.setPower(ElevatorConstants.powerDown);
-        } else elevatorMotor.setPower(0);
+        switch (state){
+            case CLIMB:
+                motorPower = ElevatorConstants.powerUp;
+                break;
+            case CLOSED:
+                motorPower = ElevatorConstants.powerDown;
+                servoToggle = false;
+                break;
+            case STOP:
+                motorPower = 0;
+                break;
+        }
 
-        if (gamepad.dpad_right && !lastDpad) servoToggle = !servoToggle;
+        elevatorMotor.setPower(motorPower);
 
+        if (gamepad.dpad_right && !lastDPadRight){
+        servoToggle = !servoToggle;
+}
         if (servoToggle){
             elevatorServo.setPosition(ElevatorConstants.servoOpen);
-        } else elevatorServo.setPosition(ElevatorConstants.servoClose);
-
-//        if (gamepad.dpad_up) wanted += 0.05;
-//        else if (gamepad.dpad_down) wanted -= 0.05;
-//
-//        if (wanted < 0) wanted = 0;
-//        if (wanted > 1) wanted = 1;
-//
-//        elevatorServo.setPosition(wanted);
-        lastDpad = gamepad.dpad_right;
+        } else {
+            elevatorServo.setPosition(ElevatorConstants.servoClose);
+        }
+        lastDPadRight = gamepad.dpad_right;
     }
 
     public static void setPower (float power){

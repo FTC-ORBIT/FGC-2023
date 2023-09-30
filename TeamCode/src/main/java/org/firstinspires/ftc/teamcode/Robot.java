@@ -36,7 +36,7 @@ public class Robot extends LinearOpMode {
         shooterBlueBalls.init(hardwareMap);
         shooterGreenBalls.init(hardwareMap);
 
-        OrbitGyro.init(this.hardwareMap);
+//        OrbitGyro.init(this.hardwareMap);
 
         GlobalData.voltageSensor = hardwareMap.voltageSensor.iterator().next();
 //        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

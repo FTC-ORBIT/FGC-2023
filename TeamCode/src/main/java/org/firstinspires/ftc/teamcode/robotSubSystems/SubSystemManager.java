@@ -22,13 +22,14 @@ public class SubSystemManager {
 
    private static ConveyorState conveyorState = ConveyorState.STOP;
    private static IntakeState intakeState = IntakeState.STOP;
-   private static ElevatorState elevatorState = ElevatorState.CLOSED;
+   private static ElevatorState elevatorState = ElevatorState.STOP;
    private static TankGrabberStates tankGrabberState = TankGrabberStates.OPEN;
    private static ShooterState shooterBlueBallsState = ShooterState.STOP;
    private static ShooterState shooterGreenBallsState = ShooterState.STOP;
    private static boolean lastRightBumper;
    private static Shooter shooterBlueBalls = new ShooterBlueBalls();
    private static Shooter shooterGreenBalls = new ShooterGreenBalls();
+    private static RobotState prevRobotState = GlobalData.robotState;
 
 
 
@@ -37,24 +38,8 @@ public class SubSystemManager {
                 : gamepad.a ? RobotState.INTAKE
                 : gamepad.x ? RobotState.SHOOT_BLUE
                 : gamepad.y ? RobotState.SHOOT_GREEN
-                : gamepad.dpad_up || gamepad.dpad_down ? RobotState.CLIMB : prevRobotState;
+                : gamepad.right_bumper || gamepad.left_bumper ? RobotState.CLIMB : prevRobotState;
     }
-
-    private static RobotState getStateFromWantedAndCurrent(final boolean[] buttons,
-                                                           final RobotState robotStateFromJoystick) {     // what this function is supposed to do?
-        RobotState state_W = robotStateFromJoystick;
-        switch (GlobalData.robotState) {
-            case INTAKE:
-                break;
-
-            default:
-                break;
-
-        }
-        return state_W;
-    }
-
-    private static RobotState prevRobotState = GlobalData.robotState;
 
     public static void setSubsystemToState(final RobotState robotState, Gamepad gamepad, Telemetry telemetry) {
         switch (robotState) {
@@ -66,7 +51,7 @@ public class SubSystemManager {
                 shooterGreenBallsState = ShooterState.STOP;
                 break;
             case INTAKE:
-                conveyorState = ConveyorState.TRANSPORT;
+                conveyorState = ConveyorState.INTAKE;
                 intakeState = IntakeState.INTAKE;
                 break;
             case SHOOT_BLUE:
@@ -84,10 +69,12 @@ public class SubSystemManager {
                 intakeState = IntakeState.STOP;
                 shooterBlueBallsState = ShooterState.STOP;
                 shooterGreenBallsState = ShooterState.STOP;
-                if (gamepad.dpad_up){ // I'm aware that this is not the best way to handle this situation, yet, I didn't find a better solution and due to the lack of time i'm not sure it's worth finding the best solution
+                if (gamepad.right_bumper){ // I'm aware that this is not the best way to handle this situation, yet, I didn't find a better solution and due to the lack of time i'm not sure it's worth finding the best solution
                  elevatorState = ElevatorState.CLIMB;
-                } else if (gamepad.dpad_down){
+                } else if (gamepad.left_bumper){
                     elevatorState = ElevatorState.CLOSED;
+                } else {
+                    elevatorState = ElevatorState.STOP;
                 }
                 break;
         }
@@ -105,14 +92,14 @@ public class SubSystemManager {
 
         Conveyor.operate(conveyorState, gamepad);
         Drivetrain.operate(-gamepad.left_stick_y, gamepad.right_trigger, gamepad.left_trigger);
-        Elevator.operate(gamepad);
+        Elevator.operate(elevatorState, gamepad);
         Intake.operate(intakeState, gamepad);
         shooterBlueBalls.operate(shooterBlueBallsState, gamepad);
         shooterGreenBalls.operate(shooterGreenBallsState, gamepad);
         TankGrabber.operate(tankGrabberState);
 
 
-
+        telemetry.addData("elevatorState", elevatorState);
         telemetry.update();
         prevRobotState = robotState;
     }

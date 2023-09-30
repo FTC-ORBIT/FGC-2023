@@ -5,37 +5,59 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class Conveyor {
     private static DcMotor conveyorMotor;
     private static CRServo conveyorServo;
-    private static double power = 0;
+    private static double motorPower = 0;
+    private static double servoPower = 0;
+    private  static  double servoSwitchTime = 0;
+    private  static  boolean forward = false;
     public static void init(HardwareMap hardwareMap){
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
-        conveyorServo = hardwareMap.get(CRServo.class, "conveyorServo");
+        conveyorServo = hardwareMap.get(CRServo.class,"conveyorServo");
 
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         conveyorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        conveyorServo.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+         servoSwitchTime = 0;
     }
     public static void operate(ConveyorState state, Gamepad gamepad){
         switch (state){
             case TRANSPORT:
-                power = ConveyorConstants.conveyorTransportPower;
-                conveyorServo.setPower(ConveyorConstants.conveyorServoPower);
+                motorPower = ConveyorConstants.conveyorTransportPower;
+                servoPower = 1;
                 break;
             case BACKWARDS:
-                power = ConveyorConstants.conveyorBackwardsPower;
-                conveyorServo.setPower(0);
+                motorPower = ConveyorConstants.conveyorBackwardsPower;
+                servoPower = -1;
+                break;
+            case INTAKE:
+                if(GlobalData.currentTime - servoSwitchTime > 300){
+                    forward = !forward;
+                    servoSwitchTime = GlobalData.currentTime;
+                }
+                motorPower = forward ? 1 : -1;
+                servoPower = -1;
                 break;
             case STOP:
-                power = 0;
-                conveyorServo.setPower(0);
+                motorPower = 0;
+                servoPower = 0;
                 break;
             case OVERRIDE:
-                power = -gamepad.right_stick_x;
+                motorPower = -gamepad.right_stick_x;
+                servoPower = -gamepad.right_stick_x;
                 break;
         }
-        conveyorMotor.setPower(power);
+
+        conveyorMotor.setPower(motorPower);
+        conveyorServo.setPower(servoPower);
 
     }
 

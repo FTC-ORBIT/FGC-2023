@@ -30,7 +30,7 @@ public class ShooterGreenBalls extends Shooter {
         shooterServo = hardwareMap.get(CRServo.class, "greenBallsServo");
 
         greenBallsMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterServo.setDirection(DcMotorSimple.Direction.FORWARD);
         //reverse the motor if needed
     }
 
@@ -46,7 +46,7 @@ public class ShooterGreenBalls extends Shooter {
                 }
                 if (GlobalData.currentTime - ShooterBlueBallsConstants.preActiveSec >= startedShootingTime) {
                     wantedPower = ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
-                } else wantedPower = -(ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage));
+                } else wantedPower = -(ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage));//a "pulse" backwards that kicks the balls out of the shooter so they don't pop out uncontrollably at the start of shooting
                 if (GlobalData.currentTime - ShooterBlueBallsConstants.shooterDelaySec >= startedShootingTime) {
                     shooterServo.setPower(1);
                     GlobalData.isReadyToShoot = true;

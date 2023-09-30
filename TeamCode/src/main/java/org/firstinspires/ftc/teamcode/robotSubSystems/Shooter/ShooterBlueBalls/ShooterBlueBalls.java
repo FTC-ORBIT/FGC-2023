@@ -16,25 +16,11 @@ public class ShooterBlueBalls extends Shooter {
     private static DcMotor shooterMotor1;
     private static DcMotor shooterMotor2;
     private static CRServo shooterServo;
-    private static double wantedServoPos = ShooterBlueBallsConstants.closedDoorPos;
-    private static boolean fault = false;
-    private static final double[] last11VoltageSensor = new double[11];
-    private static double sumOfTheLast10Voltages = 0;
-
-    private static int i = 0;
-
-    private static boolean readyToShoot = false;
-
-    private static boolean isShooting = false;
     private static double power = 0;
-    private static boolean lastRightBumper = false;
-    private static boolean lastLeftBumper = false;
-    private static OrbitColorSensor colorSensor;
-    private static boolean lastColorSensorState = false;
-    private static float firstBlueBallTime = 0; //we don't want to shoot more than 3 balls one after another, this variable represents the time the first blue ball (from the 3) was shot.
-    private static int blueBallsCounter = 0;
     private static ShooterState lastState = ShooterState.STOP;
     private static double startedShootingTime = 0;
+    private static boolean lastRightBumper = true;
+    private static boolean lastLeftBumper = true;
 
     public void init(HardwareMap hardwareMap){
         shooterMotor1 = hardwareMap.get(DcMotor.class, "shooterBlueBallsMotor1");
@@ -56,10 +42,10 @@ public class ShooterBlueBalls extends Shooter {
                 if (!state.equals(lastState)){
                     startedShootingTime = GlobalData.currentTime;
                 }
-                if (GlobalData.currentTime - ShooterBlueBallsConstants.preActiveSec >= startedShootingTime) {
                     power = ShooterBlueBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
-                } else power = -(ShooterBlueBallsConstants.shooterPower * (12 / GlobalData.currentVoltage));
-                if (GlobalData.currentTime - (ShooterBlueBallsConstants.shooterDelaySec + startedShootingTime) >= startedShootingTime) {
+
+
+                if (GlobalData.currentTime - ShooterBlueBallsConstants.shooterDelaySec >= startedShootingTime) {
                     shooterServo.setPower(1);
                 } else {
                     shooterServo.setPower(0);
@@ -79,17 +65,6 @@ public class ShooterBlueBalls extends Shooter {
     }
 
 
-    private boolean isReadyToShoot(){
-        return readyToShoot;
-    }
-
-    public boolean getFault() {
-        return fault;
-    }
-
-    public boolean isShooting(){
-        return isShooting;
-    }
 
 
     public void firstTime(Gamepad gamepad, Telemetry telemetry){ //only for the first time for the configuration
