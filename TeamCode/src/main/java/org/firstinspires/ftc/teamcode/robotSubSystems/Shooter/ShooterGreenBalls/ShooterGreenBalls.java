@@ -48,7 +48,7 @@ public class ShooterGreenBalls extends Shooter {
                     wantedPower = ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage);
                 } else wantedPower = -(ShooterGreenBallsConstants.shooterPower * (12 / GlobalData.currentVoltage));//a "pulse" backwards that kicks the balls out of the shooter so they don't pop out uncontrollably at the start of shooting
                 if (GlobalData.currentTime - ShooterBlueBallsConstants.shooterDelaySec >= startedShootingTime) {
-                    shooterServo.setPower(1);
+                    shooterServo.setPower(-1);
                     GlobalData.isReadyToShoot = true;
                 } else {
                     shooterServo.setPower(0);

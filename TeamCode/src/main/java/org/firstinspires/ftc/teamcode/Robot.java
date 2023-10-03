@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sun.tools.javac.comp.Resolve;
 
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls.ShooterBlueBalls;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterGreenBalls.ShooterGreenBalls;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
+import org.firstinspires.ftc.teamcode.robotSubSystems.TankGrabber.TankGrabber;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.intake.Intake;
 
@@ -35,6 +37,8 @@ public class Robot extends LinearOpMode {
         Intake.init(hardwareMap);
         shooterBlueBalls.init(hardwareMap);
         shooterGreenBalls.init(hardwareMap);
+        TankGrabber.init(hardwareMap);
+
 
 //        OrbitGyro.init(this.hardwareMap);
 
@@ -51,9 +55,9 @@ public class Robot extends LinearOpMode {
             GlobalData.currentTime = (float) currentTime.milliseconds();
             GlobalData.currentVoltage = GlobalData.voltageSensor.getVoltage();
 
-
             telemetry.addData("servo", Elevator.elevatorServo.getPosition());
             SubSystemManager.setSubsystemToState(SubSystemManager.getStateFromJoystick(gamepad1), gamepad1, telemetry);
+
             GlobalData.currentRobotState = SubSystemManager.getStateFromJoystick(gamepad1);
             telemetry.update();
         }

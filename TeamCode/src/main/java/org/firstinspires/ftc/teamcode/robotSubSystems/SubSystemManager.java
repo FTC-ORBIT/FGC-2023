@@ -37,45 +37,31 @@ public class SubSystemManager {
         return gamepad.b ? RobotState.TRAVEL
                 : gamepad.a ? RobotState.INTAKE
                 : gamepad.x ? RobotState.SHOOT_BLUE
-                : gamepad.y ? RobotState.SHOOT_GREEN
-                : gamepad.right_bumper || gamepad.left_bumper ? RobotState.CLIMB : prevRobotState;
+                : gamepad.y ? RobotState.SHOOT_GREEN : prevRobotState;
     }
 
     public static void setSubsystemToState(final RobotState robotState, Gamepad gamepad, Telemetry telemetry) {
         switch (robotState) {
             case TRAVEL:
             default:
-                conveyorState = ConveyorState.STOP;
                 intakeState = IntakeState.STOP;
                 shooterBlueBallsState = ShooterState.STOP;
                 shooterGreenBallsState = ShooterState.STOP;
+                conveyorState = ConveyorState.STOP;
                 break;
             case INTAKE:
                 conveyorState = ConveyorState.INTAKE;
                 intakeState = IntakeState.INTAKE;
                 break;
             case SHOOT_BLUE:
-                conveyorState = ConveyorState.STOP;
+                conveyorState = ConveyorState.INTAKE;
                 intakeState = IntakeState.INTAKE;
                 shooterBlueBallsState = ShooterState.SHOOT;
                 break;
             case SHOOT_GREEN:
-                conveyorState = GlobalData.isReadyToShoot? ConveyorState.TRANSPORT : ConveyorState.STOP;
-                intakeState = IntakeState.STOP;
+                conveyorState = ConveyorState.TRANSPORT;
+                intakeState = IntakeState.SHOOTER_GREEN;
                 shooterGreenBallsState = ShooterState.SHOOT;
-                break;
-            case CLIMB:
-                conveyorState = ConveyorState.STOP;
-                intakeState = IntakeState.STOP;
-                shooterBlueBallsState = ShooterState.STOP;
-                shooterGreenBallsState = ShooterState.STOP;
-                if (gamepad.right_bumper){ // I'm aware that this is not the best way to handle this situation, yet, I didn't find a better solution and due to the lack of time i'm not sure it's worth finding the best solution
-                 elevatorState = ElevatorState.CLIMB;
-                } else if (gamepad.left_bumper){
-                    elevatorState = ElevatorState.CLOSED;
-                } else {
-                    elevatorState = ElevatorState.STOP;
-                }
                 break;
         }
 
@@ -83,16 +69,24 @@ public class SubSystemManager {
             tankGrabberState = tankGrabberState.equals(TankGrabberStates.OPEN) ? TankGrabberStates.CLOSED : TankGrabberStates.OPEN;
         }
 
-        if (Math.abs(gamepad.right_stick_y) > 0.2) {
+        if (Math.abs(gamepad.right_stick_y) > 0.3) {
             intakeState = IntakeState.OVERRIDE;
             telemetry.addData("over 0.2", null);
         } else if (Math.abs(gamepad.right_stick_x) > 0.2){
             conveyorState = ConveyorState.OVERRIDE;
         }
 
+        if (gamepad.right_bumper){ // I'm aware that this is not the best way to handle this situation, yet, I didn't find a better solution and due to the lack of time i'm not sure it's worth finding the best solution
+            elevatorState = ElevatorState.CLIMB;
+        } else if (gamepad.left_bumper){
+            elevatorState = ElevatorState.CLOSED;
+        } else if (gamepad.dpad_up || gamepad.dpad_down || gamepad.dpad_right){
+            elevatorState = ElevatorState.OVERRIDE;
+        }
+
         Conveyor.operate(conveyorState, gamepad);
-        Drivetrain.operate(-gamepad.left_stick_y, gamepad.right_trigger, gamepad.left_trigger);
-        Elevator.operate(elevatorState, gamepad);
+        Drivetrain.operate(-gamepad.left_stick_y, gamepad.right_trigger, gamepad.left_trigger, telemetry, gamepad);
+        Elevator.operate(elevatorState, gamepad,telemetry);
         Intake.operate(intakeState, gamepad);
         shooterBlueBalls.operate(shooterBlueBallsState, gamepad);
         shooterGreenBalls.operate(shooterGreenBallsState, gamepad);
