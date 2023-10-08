@@ -9,7 +9,7 @@ public class ElevatorConstants {
     public static double ki = 0;
     public static double homeHeight = 0;
     public static double tankHeight = 0;
-    public static double climbHeight = 6350;
+    public static double climbHeight = -5500;
     public static double powerUp = 0.8;
     public static double powerDown = -0.8;
     public static double servoOpen = 0.55;

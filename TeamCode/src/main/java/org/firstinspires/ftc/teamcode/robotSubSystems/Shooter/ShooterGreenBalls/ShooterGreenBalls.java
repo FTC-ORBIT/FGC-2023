@@ -8,10 +8,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Conveyor.ConveyorState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.Shooter;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterBlueBalls.ShooterBlueBallsConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Shooter.ShooterState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
 
 public class ShooterGreenBalls extends Shooter {
 
@@ -51,7 +53,8 @@ public class ShooterGreenBalls extends Shooter {
                     shooterServo.setPower(-1);
                     GlobalData.isReadyToShoot = true;
                 } else {
-                    shooterServo.setPower(0);
+                    SubSystemManager.conveyorState = ConveyorState.BACKWARDS;
+                    shooterServo.setPower(1);
                     GlobalData.isReadyToShoot = false;
                 }
                 break;

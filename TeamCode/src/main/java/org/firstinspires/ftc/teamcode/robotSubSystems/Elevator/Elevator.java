@@ -45,7 +45,7 @@ public class Elevator {
             case CLIMB:
                 elevatorPID.setWanted(ElevatorConstants.climbHeight);
                 motorPower = elevatorPID.update(height);
-                if (height > 3000 && !servoToggle){
+                if (height < -1200 && !servoToggle){
                     servoToggle = true;
                 }
                 break;

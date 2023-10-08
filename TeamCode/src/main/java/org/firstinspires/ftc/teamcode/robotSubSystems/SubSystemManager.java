@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.intake.IntakeState;
 
 public class SubSystemManager {
 
-   private static ConveyorState conveyorState = ConveyorState.STOP;
+   public static ConveyorState conveyorState = ConveyorState.STOP;
    private static IntakeState intakeState = IntakeState.STOP;
    private static ElevatorState elevatorState = ElevatorState.STOP;
    private static TankGrabberStates tankGrabberState = TankGrabberStates.OPEN;
@@ -84,13 +84,13 @@ public class SubSystemManager {
             elevatorState = ElevatorState.OVERRIDE;
         }
 
-        Conveyor.operate(conveyorState, gamepad);
         Drivetrain.operate(-gamepad.left_stick_y, gamepad.right_trigger, gamepad.left_trigger, telemetry, gamepad);
         Elevator.operate(elevatorState, gamepad,telemetry);
         Intake.operate(intakeState, gamepad);
         shooterBlueBalls.operate(shooterBlueBallsState, gamepad);
         shooterGreenBalls.operate(shooterGreenBallsState, gamepad);
         TankGrabber.operate(tankGrabberState);
+        Conveyor.operate(conveyorState, gamepad);
 
 
         telemetry.addData("elevatorState", elevatorState);
